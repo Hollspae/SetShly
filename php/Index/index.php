@@ -1,244 +1,210 @@
-<?php 
-    require_once '../config/connect.php';
-    $goods = mysqli_query($connect, 'SELECT * FROM `Product`');
+<?php
+require_once '../config/connect.php';
+include 'formAuthorization.php';
+include 'formRegistration.php';
+session_start();
+
+
+
+
+$completeInfo = 0;
+$completeLogin = 0;
+$completeRegistration = 0;
+
+if ($_SESSION['query'] == 1) {
+    $completeInfo = 1;
+    session_unset();
+    session_destroy();
+}
+;
+
+
+if (isset($_GET['search'])) {
+    header('Location: http://setshly/php/Search/search.php?search=' . $_GET["search"] . '');
+}
+
+
 ?>
-<!-- dsda -->
+
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>SetShly</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    
-  
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
-    <link rel="stylesheet" href="/fonts/fonts.css">
-    <link rel='stylesheet' type='text/css' media='screen' href='css/styles.css'>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="libs/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="shortcut icon" href="img/logo.png" type="image/png">
+    <script src="https://unpkg.com/popper.js@1" defer></script>
+    <script src="https://unpkg.com/tippy.js@5" defer></script>
+    <script src="libs/swiper/swiper-bundle.min.js" defer></script>
+    <script src="js/app.js" defer></script>
+    <title>SetShly - Заказывай на свой вкус!</title>
 </head>
-<body>
-<div class="contentBODY">
 
-    <!-- МЕНЮ -->
-    
-    <div class="menu">
-
-        <div class="title">
-            <h1>МУЖСКОЕ</h1>
-            <h1>ЖЕНСКОЕ</h1>
+<body id="body">
+    <div class="preloader" id="preloader">
+        <div class="spinner">
+            <div class="blob top"></div>
+            <div class="blob bottom"></div>
+            <div class="blob left"></div>
+            <div class="blob move-blob"></div>
         </div>
+    </div>
 
-        <div class="list_menu">
-            <ul class="rra">
-                <li><a href="#">Верхняя одежда</a></li>
-                <li><a href="#">Нижняя одежда</a></li>
-                <li><a href="#">Обувь</a></li>
-                <li><a href="#">Верхняя одежда</a></li>
-                <li><a href="#">Нижняя одежда</a></li>
-                <li><a href="#">Обувь</a></li>
+    <?php if (empty($_SESSION['name'])) {
+        echo '
+    <div class="background-navigation display-none"></div>';
+    } ?>
+
+    <header id="header">
+        <form class="search" method="get"> <img src="img/search.png" alt="" draggable="false">
+            <input type="search" name="search" placeholder="Поиск">
+        </form>
+        <h1><a href="../Index/index.php" style="color: #282b34;">SetShly</a></h1> <img class="logo" src="img/logo.png"
+            alt="" draggable="false">
+        <nav id="navigation-header" class="navigation-header">
+            <ul id="menu">
+
+                <li>
+                    <?php
+                    if (!empty($_SESSION['name'])) {
+                        echo '
+                            <p>' . $_SESSION["name"] . '</p>';
+                    }
+                    ?>
+                </li>
+                <li>
+                    <?php
+                    if (!empty($_SESSION['name'])) {
+                        echo '<a href="http://setshly/php/profile/profile.php" class="profile" id="profile_lk"><img src="img/profile.png" alt="Личный кабинет" draggable="false"></a>';
+                    } else {
+                        echo '<div class="profile" id="profile" ><img src="img/profile.png" alt="Вход" draggable="false"></div>
+                        ';
+                    }
+                    ?>
+                </li>
+                <li>
+                    <a href="../Basket/basket.php" class="basket"><img src="img/basket.png" alt="Корзина"
+                            draggable="false"></a>
+                </li>
             </ul>
-            <div class="ul-menu">
-                <ul>
-                 <li><a href="#">Верхняя одежда</a></li>
-                 <li><a href="#">Нижняя одежда</a></li>
-                 <li><a href="#">Обувь</a></li>
-                 <li><a href="#">Верхняя одежда</a></li>
-                </ul>
-            </div>
-         </div>
-
-         <div class="openMe">
-            <p>ПОТЯНИ</p>
-         </div> 
-    </div> 
-
-<!-- Шапка -->
-    <div class="head">
-
-        <div class="head-left">
-            <div class="search">
-                <button type="submit"><img src="/php/Index/img/sear.png" alt=""></button>
-                <input type="search" placeholder="Поиск">
-            </div>
-        </div>
+        </nav>
+    </header>
+    <?
+    if ($_SESSION['completedLogin'] == "successfully") {
 
 
-        <div class="head-center">
-            <a href="../Index/index.php">SetShly</a>
+        echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var successMessage = document.getElementById('success-message');
+            successMessage.style.display = 'block';
+            setTimeout(function() {
+                successMessage.style.display = 'none';
+            }, 1500);
+        });
+    </script>";
 
-        </div>
+        unset($_SESSION['completedLogin']);
 
-        <div class="head-right">
-            <a href="../Basket/basket.php"> <img src="/basic_img/bas.png">   </a>
-            <a href="../Liked/liked.php"> <img src="/basic_img/li.png">    </a>
-            <a href="../Profile/profile.php"> <img src="/basic_img/prof.png">  </a> 
-        </div>
-
-
+    }
+    ?>
+    <div id="success-message" style="display: none;">
+        Вы зарегистрировались!
     </div>
-
-
-
-    <!-- Основной блок -->
-    <div class="Content">
-
-        <div class="content-paul">
-
-            <div class="Paul">
-              <a class="LINK" href="../Man/Man.php">МУЖСКОЕ</a>
-               <img src="/basic_img/women.jpg">
-           </div>
-           <div class="Paul">
-               <a class="LINK" href="../Woman/Woman.php" >ЖЕНСКОЕ</a>
-               
-               <img src="/basic_img/women.jpg">
-           </div> 
-
-         </div>
-
-    </div>
-
-
-    <!--Sale -->
-    <div class="Sale">
-        <div class="div">
-        <a class="LINK" href="../Hits/Hits.php" >ХИТЫ</a>
-        </div>
-        
-        <div class="div">
-        <a class="LINK" href="../Sale/Sale.php" >РАСПРОДАЖА</a>
-        </div>
-
-        <div class="div">
-        <a class="LINK" href="../Discounts/Discounts.php" >СКИДКИ</a>
-        </div>
-      
-
-
-        
-    </div>
-
-
-
-    <!-- Слайдер -->
-    <div class="swiper mySwiper slider">
-    
-        <div class="swiper-wrapper slider-card">
-             <div class="swiper-slide card">
-                 <img src="img/tov1.jpg" alt="">
-                 <p>Описание</p>
-                 <p>Рублей</p>
-             </div>
-             <div class="swiper-slide card">
-                 <img src="img/tov1.jpg" alt="">
-                 <p>Описание</p>
-                 <p>Рублей</p>
-             </div>
-             <div class="swiper-slide card">
-                 <img src="img/tov1.jpg" alt="">
-                 <p>Описание</p>
-                 <p>Рублей</p>
-             </div>
-
-             <div class="swiper-slide card">
-                 <img src="img/2tov.jpg" alt="">
-                 <p>Описание</p>
-                 <p>Рублей</p>
-             </div>
-             <div class="swiper-slide card">
-                 <img src="img/2tov.jpg" alt="">
-                 <p>Описание</p>
-                 <p>Рублей</p>
-             </div>
-             <div class="swiper-slide card">
-                 <img src="img/2tov.jpg" alt="">
-                 <p>Описание</p>
-                 <p>Рублей</p>
-             </div>
-
-             
-         </div>
-         
-         <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-pagination"></div>
-    </div> 
-
-    <!-- Подвал -->
-
-    <footer>
-        <div class="footerColumns">
-
-            <p>Ваш Аккаунт</p>
-            
-            <a href="#">Войти</a>
-            <a href="#">Регистрация</a>
-       
-        </div>
-
-        <div class="footerColumns">
-
-            <p>О Компании</p>
-            
-            <a href="#">Блог о нас</a>
-            <a href="#">Что-нибудь еще</a>
-            <a href="#">Пиво 387</a>
-            <a href="#">Пиво 387</a>
-            <a href="#">Пиво 387</a>
-            
-
-        </div>
-
-        <div class="footerColumns">
-
-            <p>Yf pfgfc</p>
-            
-            <a href="#">Xnj yb,elm</a>
-            <a href="#">Tot xnj yb,elm</a>
-            <a href="#">Gbdj 387</a>
-
-        </div>
-
-        <div class="footerColumns">
-
-            <p>Найти нас</p>
-            
-            <div class="footerColumnsLINK">
-
-                <a href="https://vk.com/Hollspae"><img src="/basic_img/messenger/vk.png "></a>
-                <a href="https://t.me/Hollspae"><img src=" /basic_img/messenger/tg.png  "></a>
-                <a href="Hollspae@vk.com">Почтецка</a>
-
+    <?php if (empty($_SESSION['name'])) {
+        echo '
+    <div class="authorization authorization-closed">
+        <div class="closing-authorization"> <img src="img/closing.png" alt="Закрыть" draggable="false"> </div>
+        <form method="post" action="">
+            <h3>Вход</h3>
+            <div class="inputs">
+                <div class="login">
+                    <label for="login">Логин </label>
+                    <input type="text" name="login" id="login">
+                </div>
+                <div class="password">
+                    <label for="password">Пароль</label>
+                    <input type="password" name="password1" id="password1">
+                </div>
             </div>
 
-        </div>
-   
-    </footer>
+            <button type="submit" name="formSubmit1" value="Продолжить">Продолжить</button>
+            <div class="registration-unlock">Регистрация</div>
 
-</div>
+        </form>
+    </div>
+    <div class="registration registration-closed">
+        <div class="closing-registration"> <img src="img/closing.png" alt="Закрыть" draggable="false"> </div>
+        <form method="post" action="">
+            <h3>Регистрация</h3>
+            <div class="inputs">
+                <div class="surname">
+                    <label for="surname">Фамилия</label>
+                    <input type="text" name="surname" id="surname">
+                </div>
+                <div class="name">
+                    <label for="name">Имя</label>
+                    <input type="text" name="name" id="name">
+                </div>
+                <div class="telephone">
+                    <label for="telephone">Телефон</label>
+                    <input type="text" name="telephone" id="telephone">
+                </div>
+                <div class="password">
+                    <label for="password">Пароль</label>
+                    <input type="password" name="password2" id="password">
+                </div>
+            </div>
+            <input type="checkbox" name="agreement" class="agreement">
+            <p>Я принимаю пользовательское соглашение и даю согласие на обработку персональных данных</p>
+            <button name="formSubmit2">Продолжить</button>
+        </form>
+    </div>
+        ';
+    }
+    ?>
 
 
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <main id="main">
+        <?php
+        if ($completeInfo == 1) {
+            echo '<div class="complete-info">Товар добавлен!</div>';
+            $completeInfo = 0;
+        }
+        ;
+        ?>
 
+        <section class="section selection-clothink">
 
-    <script>
-      var swiper = new Swiper(".mySwiper", {
-        slidesPerView: 3,
-        spaceBetween: 30,
-        slidesPerGroup: 3,
-        loop: true,
-        loopFillGroupWithBlank: true,
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
-        },
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-      });
-    </script>
-<!-- <script src="/js/index.js"></script> -->
-<!-- <script src="/js/index.js"></script> -->
-</body>
-</html>
+            <div class="female__clothink" > 
+                <a href="http://setshly/php/Search/search.php?search=Футболка">
+                    <h2>ФУТБОЛКИ</h2>
+                </a>
+                <a href="http://setshly/php/Search/search.php?search=Футболка"><img src="img/1.png" alt="" draggable="false"></a>
+            </div>
+            <div class="male__clothink"> 
+                <a href="http://setshly/php/Search/search.php?search=Джинсы">
+                    <h2>ДЖИНСЫ</h2>
+                </a>
+                <a href="http://setshly/php/Search/search.php?search=Джинсы"><img src="img/two.jpg" alt="" draggable="false"></a>
+            </div>
+        </section>
+
+        <section class="section selection-clothinks">
+
+            <div class="female__clothink"> 
+                <a href="http://setshly/php/AllProduct/allproduct.php">
+                    <h2>ВСЕ ТОВАРЫ</h2>
+                </a>
+                <a href="http://setshly/php/AllProduct/allproduct.php"><img src="img/tree.jpg" alt="" draggable="false"></a>
+            </div>
+
+        </section>
+
+        <?php
+        include '../PATTERN/footer.php';
+        ?>

@@ -1,0 +1,275 @@
+@import url(../libs/swiper/swiper-bundle.min.css);
+@import url(https://unpkg.com/tippy.js@5/dist/backdrop.css);
+a {
+    text-decoration: none;
+}
+
+:root {
+    --index: (1vh + 1vw);
+    --background-color: #f9fcff;
+    --box-shadow: #434343;
+    --main-height: 13;
+}
+
+@font-face {
+    font-family: lato_b;
+    src: url(../../../../fonts/Lato-Black.ttf);
+}
+
+@font-face {
+    font-family: comfortaa_b;
+    src: url(../../../../fonts/Comfortaa-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: exo2_b;
+    src: url(../../../../fonts/Exo2-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: rubik_b;
+    src: url(../../../../fonts/Rubik-VariableFont_wght.ttf);
+}
+
+body,
+html {
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--background-color);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+main {
+    display: flex;
+    /* justify-content: space-around;*/
+    align-items: center; 
+    flex-direction: column;
+    width: 100vw;
+    height: calc(var(--index) * 88);
+}
+#navigation{
+    display: flex;
+    width: calc(var(--index) * 50);
+    height: calc(var(--index) * 3);
+    margin-top: calc(var(--index) * 2);
+    margin-bottom: calc(var(--index) * 1);
+    align-items: center; 
+    flex-direction: column;
+    /* border: calc(var(--index) *.1) solid black; */
+
+}
+#navigation-link{
+
+    list-style-type: none;
+    display: inline-flex;
+    align-items: center; 
+
+    /* border: calc(var(--index) *  .1) solid rgb(153, 88, 88); */
+}
+
+
+.navigation_arrow{
+    align-items: center; 
+    display: inline-flex;
+    height: calc(var(--index) * 1.2);
+    margin-right: calc(var(--index) * .5);
+}
+
+.navigation-link__a{
+    display: flex;
+    justify-content: space-around;
+    align-items: center; 
+    width: calc(var(--index) * 10);
+    margin-left: calc(var(--index) * 1);
+    /* border: calc(var(--index) *  .1) solid rgb(153, 88, 88); */ */
+}
+
+.nav_two{
+    display: flex;
+    justify-content: center;
+    border: calc(var(--index) *  ) solid rgb(153, 88, 88);
+    margin-top: calc(var(--index) * .5);
+    text-decoration: none;
+   
+}
+.navigation-link__Nav>a{
+    text-decoration: none;
+    font-family: comfortaa_b;
+    font-size: calc(var(--index) * .6);
+    color: #000000;
+
+    border-radius: calc(var(--index) * 1);
+    margin-right: calc(var(--index) * 1);
+  
+}
+
+
+#navigation-link>li>.navigation-link__a>a{
+    font-family: comfortaa_b;
+    font-size: calc(var(--index) * .8);
+    color: #000000;
+
+    border-radius: calc(var(--index) * 1);
+}
+
+
+
+.SECTION__productEditDetailed>form{
+    display: flex;
+    width: 100%;
+    height: auto;
+ 
+}
+.HeaderSETCION{
+    margin-top: calc(var(--index) * 1);
+    display: flex;
+}
+.HeaderSETCION>h2{
+    color: #282b34;
+    font-size: calc(var(--index) * 1.1);
+    font-family: comfortaa_b;
+    margin-bottom: calc(var(--index) * .5);
+}
+.SectionDetalied{
+    margin-top: calc(var(--index) * 2);
+    display: flex;
+
+}
+.imgCategory{
+    width: calc(var(--index) * 4.5);
+    height: calc(var(--index) * 5.5);
+    border-radius: calc(var(--index) * .2);
+}
+
+table{
+    text-align: center;
+    border-collapse: collapse;
+
+    font-family: comfortaa_b;
+    font-weight: 400;
+}
+th, td{
+    padding: calc(var(--index) * 0.9);
+    border: calc(var(--index) * 0.1) solid rgb(23, 23, 23);
+}
+td{
+    font-size: calc(var(--index) * .8);
+}
+th{
+    font-size: calc(var(--index) * 1.1);
+}
+
+
+.SelectionEdit{
+    display: inline-flex;
+
+}
+.SelectionEdit>ul>li{
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+
+    margin-top: calc(var(--index) * 1);
+    margin-right: calc(var(--index) * 1);
+
+    width: calc(var(--index) * 10);
+    height: calc(var(--index) * 2);
+   
+}
+
+.SelectionEdit>ul>li>h2{
+    color: #282b34;
+    font-size: calc(var(--index) * .9);
+    font-family: comfortaa_b;
+ 
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.SelectionEdit>ul>li>input[type="text"]{
+    color: #282b34;
+    font-size: calc(var(--index) * 0.8);
+    font-family: comfortaa_b;
+
+    display: inline-flex;
+
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+
+    border-radius: calc(var(--index) * .4);
+    border: calc(var(--index) * .1) solid black;
+    width: calc(var(--index) * 12);
+    height: calc(var(--index) * 2);
+
+}
+.SelectionEdit>ul>li>input[type="file"]{
+    color: #282b34;
+    font-size: calc(var(--index) * 0.8);
+    font-family: comfortaa_b;
+
+    display: inline-flex;
+
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+
+
+    border: none;
+    width: calc(var(--index) * 12);
+    height: calc(var(--index) * 2);
+
+}
+.DeleteEmbroidery{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    color: rgb(180, 3, 3);
+
+
+    width: calc(var(--index) * 5);
+    height: calc(var(--index) * 1.5);
+
+    border: none;
+    font-family: rubik_b;
+    font-weight: 500;
+    font-size: calc(var(--index) * .7);
+    cursor: pointer;
+}
+
+
+.SelectionEdit__btn>button{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    background-color: #2a2a2a;
+    color: white;
+
+
+    width: calc(var(--index) * 10);
+    height: calc(var(--index) * 2.5);
+
+    border: none;
+    border-radius: calc(var(--index) * .4);
+    font-family: rubik_b;
+    font-weight: 400;
+    font-size: calc(var(--index) * 1);
+    cursor: pointer;
+}
+.SelectionEdit>form>ul{
+    display: inline-flex;
+    flex-direction: column;
+    list-style-type: none;
+}

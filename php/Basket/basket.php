@@ -1,103 +1,271 @@
-<?php 
-    require_once '../config/connect.php';
-    $goods = mysqli_query($connect, 'SELECT * FROM `Product`');
+<?php require_once '../config/connect.php';
+require_once 'form-basket.php';
+
+session_start();
+$completeInfo = 0;
+if
+($_SESSION['query'] == 1) {
+    $completeInfo = 1;
+    session_unset();
+    session_destroy();
+}
+;
+if (isset($_GET['search'])) {
+    header('Location: http://setshly/php/Search/search.php?search=' . $_GET["search"] . '');
+}
+
+
 ?>
 
+
+
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>SetShly</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <link rel="stylesheet" href="/fonts/fonts.css">
-    <link rel='stylesheet' type='text/css' media='screen' href='css/style.css'>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="libs/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="shortcut icon" href="img/logo.png" type="image/png">
+    <script src="https://unpkg.com/popper.js@1" defer></script>
+    <script src="https://unpkg.com/tippy.js@5" defer></script>
+    <script src="libs/swiper/swiper-bundle.min.js" defer></script>
+    <script src="js/app.js" defer></script>
+    <title>SetShly - Заказывай на свой вкус!</title>
 </head>
-<body>
-<div class="contentBODY">
 
-<!-- Шапка -->
-    <div class="head">
+<body id="body">
+    <div class="background display-none" id="background"></div>
 
-        <div class="head-left">
-            <div class="search">
-                <button type="submit"><img src="/php/Index/img/sear.png" alt=""></button>
-                <input type="search" placeholder="Поиск">
+    <?php if (empty($_SESSION['name'])) {
+        echo '
+            <div class="background-navigation display-none"></div>';
+    } ?>
+
+    <header id="header">
+        <form class="search" method="get"> <img src="img/search.png" alt="" draggable="false">
+            <input type="search" name="search" placeholder="Поиск">
+        </form>
+        <h1><a href="../Index/index.php" style="color: #282b34;">SetShly</a></h1> <img class="logo" src="img/logo.png"
+            alt="" draggable="false">
+        <nav id="navigation-header" class="navigation-header">
+            <ul id="menu">
+                <li>
+                    <?php
+                    if (!empty($_SESSION['name'])) {
+                        echo '<p>' . $_SESSION["name"] . '</p>';
+                    }
+                    ?>
+                </li>
+                <li>
+                    <?php
+                    if (!empty($_SESSION['name'])) {
+                        echo '<a href="http://setshly/php/profile/profile.php" class="profile" id="profile_lk"><img src="img/profile.png" alt="Личный кабинет" draggable="false"></a>';
+                    } else {
+                        echo '<div class="profile" id="profile" ><img src="img/profile.png" alt="Вход" draggable="false"></div>
+                                ';
+                    }
+                    ?>
+
+                </li>
+                <li>
+                    <a href="../Basket/basket.php" class="basket"><img src="img/basket.png" alt="Корзина"
+                            draggable="false"></a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <main>
+
+        <div class="container">
+            <div class="order">
+
+                <h2 class="HeaderDelivery">Корзина</h2>
+                <nav class="container-navigation">
+                    <ul>
+                        <li><a href="http://setshly/php/profile/profile.php" class="history-back">
+                                <img class="navigation_arrow" src="img/arrow.png" alt=""></a></li>
+                        <li><a href="http://setshly/php/Index/index.php">Главная страница</a></li>
+
+                        <li><a href="http://setshly/php/AllProduct/allproduct.php">Все товары</a></li>
+
+                        <li>
+                            <h2>Итого:
+                                <?php PriceOutput($connect, $basket, $list_productToBasket, $production_list, $product_price_list, $procent) ?>р
+                            </h2>
+                        </li>
+
+
+                    </ul>
+
+                </nav>
+
+                <section class="section-product">
+
+                    <?php
+                    dataOutput($basket, $list_productToBasket, $production_list, $product_price_list, $product_list, $category_list, $embroidery, $material_list, $color_list, $size_list, $connect);
+                    if (!empty($Error['emptyBasket'])) {
+                        echo '<p class="Error"> ' . $Error['emptyBasket'] . '</p>';
+                    }
+
+                    ?>
+
+                </section>
             </div>
-        </div>
-
-
-        <div class="head-center">
-            <a href="../Index/index.php">SetShly</a>
 
         </div>
 
-        <div class="head-right">
-            <a href="../Basket/basket.php"> <img src="/basic_img/bas.png">   </a>
-            <a href="../Liked/liked.php"> <img src="/basic_img/li.png">    </a>
-            <a href="../Profile/profile.php"> <img src="/basic_img/prof.png">  </a> 
-        </div>
+        <aside class="decoration">
+            <form method="post" action="form-basket.php">
+                <div class="decoration_block decoration-delivery">
 
+                    <h2>Доставка в пункт выдачи</h2>
 
-    </div>
+                    <select name="DeliveryText" id="DeliveryText">
+                        <?php DeliveryUser($delivery) ?>
+                    </select>
 
+                </div>
+                <div class="decoration_block ">
 
-    <!-- Подвал -->
+                    <h2>Способ оплаты</h2>
 
-    <footer>
-        <div class="footerColumns">
+                    <?php
 
-            <p>Ваш Аккаунт</p>
-            
-            <a href="#">Войти</a>
-            <a href="#">Регистрация</a>
-       
-        </div>
+InputCardUser($countCardUser, $ARRnumberCardUser, $Card, $connect);
 
-        <div class="footerColumns">
+                    ?>
+                </div>
 
-            <p>О Компании</p>
-            
-            <a href="#">Блог о нас</a>
-            <a href="#">Что-нибудь еще</a>
-            <a href="#">Пиво 387</a>
-            <a href="#">Пиво 387</a>
-            <a href="#">Пиво 387</a>
+                <div class="decoration_block decoration-sum">
+                    <h2>Сумма оплаты:
+                        <?php PriceOutput($connect, $basket, $list_productToBasket, $production_list, $product_price_list, $procent) ?>р
+                    </h2>
+                </div>
+
+                <button type="submit" class="btnForOrder" name="submitOrder" id="submitOrder">Заказать</button>
+            </form>
+            <button id="CardOpen" name="CardOpen" class="CardNumberEdit">Изменить карту</button>
+
             
 
-        </div>
+        </aside>
 
-        <div class="footerColumns">
+        <!-- Добавление карты -->
+        <aside class="BlockCard display-none" id="BlockCard">
 
-            <p>Yf pfgfc</p>
-            
-            <a href="#">Xnj yb,elm</a>
-            <a href="#">Tot xnj yb,elm</a>
-            <a href="#">Gbdj 387</a>
-
-        </div>
-
-        <div class="footerColumns">
-
-            <p>Найти нас</p>
-            
-            <div class="footerColumnsLINK">
-
-                <a href="https://vk.com/Hollspae"><img src="/basic_img/messenger/vk.png "></a>
-                <a href="https://t.me/Hollspae"><img src=" /basic_img/messenger/tg.png  "></a>
-                <a href="Hollspae@vk.com">Почтецка</a>
-
+            <div class="closing-card" id="closing-card">
+                <img src="img/closing.png" alt="Закрыть" draggable="false">
             </div>
+            <form method="post" action="">
 
-        </div>
-   
-    </footer>
+                <div class="SectionNumber">
+                    <p>Номер карты</p>
+                    <input type="text" name="CardNumber" id="CardNumber" placeholder="0000 0000 0000 0000"
+                        maxlength="16" minlength="16" required>
 
-</div>
+                </div>
+                <div class="SectionDuration">
+                    <p>Срок действия</p>
+                    <input type="text" name="Duration" id="Duration" placeholder="00/00" maxlength="4" minlength="4"
+                        required>
+                </div>
+                <div class="SectionCVV">
+                    <p>CVV</p>
+                    <input type="text" name="CVV" id="CVV" placeholder="000" maxlength="3" minlength="3" required>
+                </div>
+                <div class="buttonCard">
+                    <button id="SubmitDetaliedCard" name="SubmitDetaliedCard">Сохранить</button>
+                </div>
+            </form>
+        </aside>
 
 
+        <!-- Подтвержение заказа -->
+        <!-- <aside class="BlockOrder display-none" id="BlockOrder">
+            <div class="closing-card" id="closing-order">
+                <img src="img/closing.png" alt="Закрыть" draggable="false">
+            </div>
+            <form action="" method="post">
+                <h2>Подтверждение заказа</h2>
+                <div class="sectionOrder">
+                    <ul class="OrderULone">
+                        <li>
+                            <h2>Номер заказа:</h2>
+                        </li>
+
+                        <li>
+                            <h2>Адрес получения:</h2>
+                        </li>
+                        <li>
+                            <h2>Дата заказа:</h2>
+                        </li>
+                        <li>
+                            <h2>Дата получения:</h2>
+                        </li>
+                        <li>
+                            <h2>Сумма заказа:</h2>
+                        </li>
+                        <li>
+                            <h2>Оплата</h2>
+                        </li>
+                        <li>
+                            <h2>Промокод:</h2>
+                        </li>
+
+                    </ul>
+                    <ul class="OrderULtwo">
+                        <li>
+                            <h2><?php echo $EndOrder ?></h2>
+                        </li>
+                        <li>
+                            <h2><?php echo $Index . ", " . $Region . ", г. " . $City . ", ул. " . $Adrress . ", д. " . $HouseNumber ?>
+                            </h2>
+                        </li>
+                        <li>
+                            <h2><?php echo $date ?></h2>
+                        </li>
+                        <li>
+                            <h2><?php echo $dateReceipt ?></h2>
+                        </li>
+                        <li>
+                            <h2><?php echo $arrProduct_price ?> р</h2>
+                        </li>
+                        <li>
+                            <h2><?php echo $NumberCard ?> </h2>
+                        </li>
+                        <li>
+                            <input class="Order_sale" type="text" name="sale" id="sale"
+                                placeholder="">
+                            <p class="ErrorCard"></p>
+                        </li>
+                    </ul>
+                </div>
+
+
+                <div class="buttonOrder">
+                    <button id="SubmitDetaliedOrder" name="SubmitDetaliedOrder">Оформить заказ</button>
+                </div>
+            </form>
+        </aside> -->
+
+
+    </main>
+    <!-- <footer id="footer">
+        <div class="about-company"><a href="">О НАС</a></div>
+        <div class="help"><a href="">ПОМОЩЬ</a></div>
+        <div class="find"><a href="">НАЙДИ НАС</a></div>
+    </footer> -->
+
+    <?php
+        include '../PATTERN/footer.php';
+        ?>
 </body>
+
 </html>
